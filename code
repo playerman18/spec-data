@@ -1,0 +1,36 @@
+# code for generating the spread of a virus using randomly generated numbers
+
+import numpy as np
+def simulate_infection(population):
+    days = 1
+    infected = [1]  
+    infected_people = {np.random.randint(1, population+1)} 
+    total_infected = 1
+
+    print(f"Day {days}: {infected_people}")
+
+    while total_infected < population:
+        new_infections = set()  
+        for person in infected_people:
+            if len(infected_people) + len(new_infections) >= population:
+                break
+            while True:
+                new_infection = np.random.randint(1, population+1)
+                if new_infection not in infected_people and new_infection not in new_infections:
+                    new_infections.add(new_infection)
+                    print(f"{person} infects {new_infection}")
+                    break 
+                print(f"{person} fails to infect {new_infection}")
+                break
+        infected_people.update(new_infections)
+        total_infected = len(infected_people)
+        infected.append(total_infected)
+        days += 1
+        print(f"Day {days}: {infected_people}")  
+
+    return infected, days
+
+population = 32
+infected, days = simulate_infection(population)
+print(f'Total days to infect entire population: {days}')
+print(f"Total number of infected people each day:{infected}")
